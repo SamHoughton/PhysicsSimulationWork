@@ -1,2 +1,4 @@
-# PhysicsSimulationWork
-Test projects for the physics simulation module
+PhysXTutorial
+=============
+
+Tutorial for using PhysX SDK 3.x
