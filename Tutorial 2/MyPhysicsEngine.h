@@ -41,13 +41,34 @@ namespace PhysicsEngine
 	{
 		Plane* plane;
 		Box* box;
+		Sphere* sphere;
+		Capsule* capsule;
+		CompoundBox* compoundbox;
 
 	public:
 		///A custom scene class
 		void SetVisualisation()
-		{
+		{	
+			// unsure
 			px_scene->setVisualizationParameter(PxVisualizationParameter::eSCALE, 1.0f);
+			// Shapes visualise
 			px_scene->setVisualizationParameter(PxVisualizationParameter::eCOLLISION_SHAPES, 1.0f);
+			// Shows the worlds x y z
+			px_scene->setVisualizationParameter(PxVisualizationParameter::eWORLD_AXES, 1.0f);
+			// Shows contact points, slef explanitory 
+			px_scene->setVisualizationParameter(PxVisualizationParameter::eCONTACT_POINT, 1.0f);
+			// Linear Velocity
+			px_scene->setVisualizationParameter(PxVisualizationParameter::eBODY_LIN_VELOCITY, 1.0f);
+			// Angular Velocity
+			px_scene->setVisualizationParameter(PxVisualizationParameter::eBODY_ANG_VELOCITY, 1.0f);
+			// Visualise a body mass, sleeping bodies in black other bodies that are awake in white
+			px_scene->setVisualizationParameter(PxVisualizationParameter::eBODY_MASS_AXES, 1.0f);
+			// shows the forces of contact on an object
+			px_scene->setVisualizationParameter(PxVisualizationParameter::eCONTACT_FORCE, 1.0f);
+			// shows the axis for each actor in the scene
+			px_scene->setVisualizationParameter(PxVisualizationParameter::eACTOR_AXES, 1.0f);
+			
+
 		}
 
 		//Custom scene initialisation
@@ -61,14 +82,36 @@ namespace PhysicsEngine
 			plane->Color(PxVec3(210.f/255.f,210.f/255.f,210.f/255.f));
 			Add(plane);
 
-			box = new Box(PxTransform(PxVec3(.0f,10.f,.0f)));
+			box = new Box(PxTransform(PxVec3(5.f,10.f,.0f)));
 			box->Color(color_palette[0]);
 			Add(box);
+
+			compoundbox = new CompoundBox(PxTransform(PxVec3(-15.f, 10.f, .0f)));
+			compoundbox->Color(color_palette[2]);
+			Add(compoundbox);
+
+
+			sphere = new Sphere(PxTransform(PxVec3(-10.f, 10.f, .0f)));
+			sphere->Color(color_palette[1]);
+			Add(sphere);
+
+			capsule = new Capsule(PxTransform(PxVec3(-5.f, 10.f, .0f)));
+			capsule->Color(color_palette[3]);
+			Add(capsule);
 		}
 
 		//Custom udpate function
 		virtual void CustomUpdate() 
 		{
+			int i = 0;
+
+			while (i < 10) {
+
+				box = new Box(PxTransform(PxVec3(i + 10.f, i + 1.f, .0f)));
+				box->Color(color_palette[0]);
+				Add(box);
+				i++;
+			}
 		}
 	};
 }

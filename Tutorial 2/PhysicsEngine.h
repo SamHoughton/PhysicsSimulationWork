@@ -29,7 +29,7 @@ namespace PhysicsEngine
 	///Create a new material
 	PxMaterial* CreateMaterial(PxReal sf=.0f, PxReal df=.0f, PxReal cr=.0f);
 
-	static const PxVec3 default_color(.8f,.8f,.8f);
+	static const PxVec3 default_color(.1f,.1f,.1f);
 
 	///Abstract Actor class
 	///Inherit from this class to create your own actors

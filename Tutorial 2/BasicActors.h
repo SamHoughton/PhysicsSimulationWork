@@ -33,6 +33,8 @@ namespace PhysicsEngine
 		}
 	};
 
+
+
 	///Box class
 	class Box : public DynamicActor
 	{
@@ -41,10 +43,27 @@ namespace PhysicsEngine
 		// - pose in 0,0,0
 		// - dimensions: 1m x 1m x 1m
 		// - denisty: 1kg/m^3
-		Box(const PxTransform& pose=PxTransform(PxIdentity), PxVec3 dimensions=PxVec3(.5f,.5f,.5f), PxReal density=1.f) 
+		Box(const PxTransform& pose=PxTransform(PxIdentity), PxVec3 dimensions=PxVec3(.5f,.5f,.5f), PxReal density=5.f) 
 			: DynamicActor(pose)
 		{ 
 			CreateShape(PxBoxGeometry(dimensions), density);
+		}
+	};
+	
+	/// Compound Box
+	class CompoundBox : public DynamicActor
+	{
+	public:
+		//a CompoundBox with default parameters:
+		// - pose in 0,0,0
+		// - dimensions: 2m x 1m x 1m
+		// - denisty: 1kg/m^3
+		CompoundBox(const PxTransform& pose=PxTransform(PxIdentity), PxVec3 dimensions=PxVec3(1.5f,.5f,.5f), PxVec3 dimensions2 = PxVec3(.5f, 1.5f, 1.5f), PxReal density=.01f)
+			: DynamicActor(pose)
+		{ 
+			CreateShape(PxBoxGeometry(dimensions), density);
+			CreateShape(PxBoxGeometry(dimensions2), density);
+			GetShape(1)->setLocalPose(PxTransform(PxVec3(1.f, .0f, .0f)));
 		}
 	};
 
