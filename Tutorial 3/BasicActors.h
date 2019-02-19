@@ -26,7 +26,7 @@ namespace PhysicsEngine
 		// - pose in 0,0,0
 		// - dimensions: 1m
 		// - denisty: 1kg/m^3
-		Sphere(const PxTransform& pose=PxTransform(PxIdentity), PxReal radius=1.f, PxReal density=1.f) 
+		Sphere(const PxTransform& pose=PxTransform(PxIdentity), PxReal radius=.2f, PxReal density=.2f) 
 			: DynamicActor(pose)
 		{ 
 			CreateShape(PxSphereGeometry(radius), density);
@@ -41,12 +41,30 @@ namespace PhysicsEngine
 		// - pose in 0,0,0
 		// - dimensions: 1m x 1m x 1m
 		// - denisty: 1kg/m^3
-		Box(const PxTransform& pose=PxTransform(PxIdentity), PxVec3 dimensions=PxVec3(.5f,.5f,.5f), PxReal density=1.f) 
+		Box(const PxTransform& pose=PxTransform(PxIdentity), PxVec3 dimensions=PxVec3(20.f,.5f,.5f), PxReal density=1.f) 
 			: DynamicActor(pose)
 		{ 
 			CreateShape(PxBoxGeometry(dimensions), density);
 		}
 	};
+
+	class Gun : public DynamicActor
+	{
+	public:
+		//a Gun with default parameters:
+		// - pose in 0,0,0
+		// - dimensions: 1m x 1m x 1m
+		// - denisty: 1kg/m^3
+		Gun(const PxTransform& pose = PxTransform(PxIdentity), PxVec3 dimensions = PxVec3(.2f, 0.5f, .5f), PxReal density = 1.f)
+			: DynamicActor(pose)
+		{
+			CreateShape(PxBoxGeometry(dimensions), density);
+			CreateShape(PxCapsuleGeometry(0.5f, 0.5f), density);
+
+			GetShape(1)->setLocalPose(PxTransform(PxVec3(.2f,0.5f,.0f)));
+		}
+	};
+
 
 	class Capsule : public DynamicActor
 	{

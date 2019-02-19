@@ -7,7 +7,7 @@ int main()
 {
 	try 
 	{ 
-		VisualDebugger::Init("Tutorial 3", 800, 800); 
+		VisualDebugger::Init("Tutorial 3", 1800, 1000); 
 	}
 	catch (Exception exc) 
 	{ 

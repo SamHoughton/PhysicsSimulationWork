@@ -10,7 +10,7 @@ namespace PhysicsEngine
 
 	//a list of colours: Circus Palette
 	static const PxVec3 color_palette[] = {PxVec3(46.f/255.f,9.f/255.f,39.f/255.f),PxVec3(217.f/255.f,0.f/255.f,0.f/255.f),
-		PxVec3(255.f/255.f,45.f/255.f,0.f/255.f),PxVec3(255.f/255.f,140.f/255.f,54.f/255.f),PxVec3(4.f/255.f,117.f/255.f,111.f/255.f)};
+		PxVec3(255.f/255.f,45.f/255.f,0.f/255.f),PxVec3(255.f/255.f,140.f/255.f,54.f/255.f),PxVec3(4.f/255.f,117.f/255.f,111.f/255.f), PxVec3(0.f/255.f ,209.f/255.f, 111.f/255.f) };
 
 	//pyramid vertices
 	static PxVec3 pyramid_verts[] = {PxVec3(0,1,0), PxVec3(1,0,0), PxVec3(-1,0,0), PxVec3(0,0,1), PxVec3(0,0,-1)};
@@ -182,7 +182,9 @@ namespace PhysicsEngine
 	class MyScene : public Scene
 	{
 		Plane* plane;
-		Box* box, * box2;
+		Box* box, * box2, *box3;
+		Sphere* sphere1;
+		Gun* gun1;
 		MySimulationEventCallback* my_callback;
 		
 	public:
@@ -195,6 +197,9 @@ namespace PhysicsEngine
 		{
 			px_scene->setVisualizationParameter(PxVisualizationParameter::eSCALE, 1.0f);
 			px_scene->setVisualizationParameter(PxVisualizationParameter::eCOLLISION_SHAPES, 1.0f);
+			px_scene->setVisualizationParameter(PxVisualizationParameter::eJOINT_LOCAL_FRAMES, 1.0f);
+			px_scene->setVisualizationParameter(PxVisualizationParameter::eJOINT_LIMITS, 1.0f);
+	
 		}
 
 		//Custom scene initialisation
@@ -209,31 +214,65 @@ namespace PhysicsEngine
 			px_scene->setSimulationEventCallback(my_callback);
 
 			plane = new Plane();
-			plane->Color(PxVec3(210.f/255.f,210.f/255.f,210.f/255.f));
+			plane->Color(color_palette[5]);
 			Add(plane);
 
 			box = new Box(PxTransform(PxVec3(.0f,.5f,.0f)));
-			box->Color(color_palette[0]);
-			//set collision filter flags
-			// box->SetupFiltering(FilterGroup::ACTOR0, FilterGroup::ACTOR1);
-			//use | operator to combine more actors e.g.
-			// box->SetupFiltering(FilterGroup::ACTOR0, FilterGroup::ACTOR1 | FilterGroup::ACTOR2);
-			//don't forget to set your flags for the matching actor as well, e.g.:
-			// box2->SetupFiltering(FilterGroup::ACTOR1, FilterGroup::ACTOR0);
-			box->Name("Box1");
-			Add(box);
+			box->Color(color_palette[3]);
 
-			/*
-			//joint two boxes together
-			//the joint is fixed to the centre of the first box, oriented by 90 degrees around the Y axis
-			//and has the second object attached 5 meters away along the Y axis from the first object.
-			RevoluteJoint joint(box, PxTransform(PxVec3(0.f,0.f,0.f),PxQuat(PxPi/2,PxVec3(0.f,1.f,0.f))), box2, PxTransform(PxVec3(0.f,5.f,0.f)));
-			*/
+			box2 = new Box(PxTransform(PxVec3(.0f, .5f, 1.0f)));
+			box2->Color(color_palette[2]);
+			
+			box3 = new Box(PxTransform(PxVec3(.0f, .5f, 2.f)));
+			box3->Color(color_palette[1]);
+
+			sphere1 = new Sphere(PxTransform(PxVec3(.5f, 2.f, 2.f)));
+			box3->Color(color_palette[0]);
+
+			gun1 = new Gun(PxTransform(PxVec3(-15.f, 2.f, 0.f)));
+			gun1->Color(color_palette[4]);
+
+			//set collision filter flags
+			box->SetupFiltering(FilterGroup::ACTOR0, FilterGroup::ACTOR1);
+
+			box2->SetupFiltering(FilterGroup::ACTOR0, FilterGroup::ACTOR1);
+
+			box3->SetupFiltering(FilterGroup::ACTOR0, FilterGroup::ACTOR1);
+			//use | operator to combine more actors e.g.
+			
+			box->Name("Box1");
+			box2->Name("Box2");
+			box3->Name("Box3");
+			
+			Add(box);
+			Add(box2);
+			Add(box3);
+			Add(sphere1);
+			Add(gun1);
+
+
+			DistanceJoint joint(box, PxTransform(PxVec3(0.f, 0.f, 0.f), PxQuat(PxPi / 2, PxVec3(0.f, 1.f, 0.f))), box2, PxTransform(PxVec3(0.f, 5.f, 0.f)));
+			DistanceJoint joint2(box2, PxTransform(PxVec3(0.f, 0.f, 0.f), PxQuat(PxPi / 2, PxVec3(0.f, 1.f, 0.f))), box3, PxTransform(PxVec3(0.f, 5.f, 0.f)));
+
+
+
 		}
 
 		//Custom udpate function
 		virtual void CustomUpdate() 
 		{
+			int Px = rand() % 255;
+			int Py = rand() % 255;
+			int Pz = rand() % 255;
+
+			box = new Box(PxTransform(PxVec3(Px, Py, Pz)));
+
+			int R = rand() % 255;
+			int G = rand() % 255;
+			int B = rand() % 255;
+			
+			box->Color(PxVec3(R /255.0f ,G/255.0f ,B/255.0f ));
+			Add(box);
 		}
 
 		/// An example use of key release handling

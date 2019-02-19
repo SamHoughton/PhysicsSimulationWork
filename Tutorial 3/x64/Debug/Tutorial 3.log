@@ -1,0 +1,6 @@
+﻿  Tutorial 3.cpp
+c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(268): warning C4244: 'argument': conversion from 'int' to 'physx::PxReal', possible loss of data
+  VisualDebugger.cpp
+c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(268): warning C4244: 'argument': conversion from 'int' to 'physx::PxReal', possible loss of data
+  Generating Code...
+  Tutorial 3.vcxproj -> C:\Users\Student\Desktop\PhysicsSimulationWork-master\x64\Debug\Tutorial 3.exe
