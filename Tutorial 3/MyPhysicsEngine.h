@@ -227,7 +227,7 @@ namespace PhysicsEngine
 			box3->Color(color_palette[1]);
 
 			sphere1 = new Sphere(PxTransform(PxVec3(.5f, 2.f, 2.f)));
-			box3->Color(color_palette[0]);
+			sphere1->Color(color_palette[0]);
 
 			gun1 = new Gun(PxTransform(PxVec3(-15.f, 2.f, 0.f)));
 			gun1->Color(color_palette[4]);
@@ -261,7 +261,7 @@ namespace PhysicsEngine
 		//Custom udpate function
 		virtual void CustomUpdate() 
 		{
-			int Px = rand() % 255;
+			/*int Px = rand() % 255;
 			int Py = rand() % 255;
 			int Pz = rand() % 255;
 
@@ -270,15 +270,85 @@ namespace PhysicsEngine
 			int R = rand() % 255;
 			int G = rand() % 255;
 			int B = rand() % 255;
-			
-			box->Color(PxVec3(R /255.0f ,G/255.0f ,B/255.0f ));
-			Add(box);
+
+			box->Color(PxVec3(R / 255.0f, G / 255.0f, B / 255.0f));
+			Add(box);*/
 		}
 
+
 		/// An example use of key release handling
-		void ExampleKeyReleaseHandler()
+		void GunShot()
 		{
-			cerr << "I am realeased!" << endl;
+			sphere1 = new Sphere(PxTransform(PxVec3(-12.f, 2.f, 0.f)));
+			sphere1->Color(color_palette[0]);
+			Add(sphere1);
+			
+			//get the actor
+			PxActor* actor = sphere1->Get();
+
+			if (actor->isRigidBody())
+			{
+				//actor is 100% a rigidbody
+				//..
+
+				//get the rigidbody by casting to it
+				
+				PxRigidBody* rigidbody = (PxRigidBody*)actor;
+				
+				
+
+				//add some forces
+				rigidbody->addForce(PxVec3(0.5f, .0f, .0f), PxForceMode::eIMPULSE, 1);
+			}
+			
+			//PxRigidBody::addForce(PxVec3)
+			
+			//PxRigidBody::addForce(*(PxRigidDynamic*)sphere1, 1.0f);
+			
+		}
+
+		void shotGun() 
+		{
+			int i = 0;
+			int x = 0;
+			
+			while (i < 5)
+			{
+				
+				sphere1 = new Sphere(PxTransform(PxVec3(-10.f, 2.f, 0.f + x)));
+				sphere1->Color(color_palette[2]);
+				Add(sphere1);
+
+				PxActor* actor = sphere1->Get();
+
+			if (actor->isRigidBody())
+			{
+				//actor is 100% a rigidbody
+				//..
+
+				//get the rigidbody by casting to it
+
+				PxRigidBody* rigidbody = (PxRigidBody*)actor;
+
+				float max = 1;
+				int min = 0.2;
+
+				float Px = rand() % 2;
+				float Py = rand() % 1;
+				int Pz = rand() % 1;
+
+				//add some forces
+				rigidbody->addForce(PxVec3(Px, Py, .0f), PxForceMode::eIMPULSE, 1);
+			}
+
+				x++;
+				i++;
+			}
+
+			
+			//PxRigidBody::addForce(PxVec3)
+
+			//PxRigidBody::addForce(*(PxRigidDynamic*)sphere1, 1.0f);
 		}
 
 		/// An example use of key presse handling
