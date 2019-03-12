@@ -10,7 +10,7 @@ namespace PhysicsEngine
 
 	//a list of colours: Circus Palette
 	static const PxVec3 color_palette[] = {PxVec3(46.f/255.f,9.f/255.f,39.f/255.f),PxVec3(217.f/255.f,0.f/255.f,0.f/255.f),
-		PxVec3(255.f/255.f,45.f/255.f,0.f/255.f),PxVec3(255.f/255.f,140.f/255.f,54.f/255.f),PxVec3(4.f/255.f,117.f/255.f,111.f/255.f), PxVec3(0.f/255.f ,209.f/255.f, 111.f/255.f) };
+		PxVec3(255.f/255.f,45.f/255.f,0.f/255.f),PxVec3(255.f/255.f,140.f/255.f,54.f/255.f),PxVec3(4.f/255.f,117.f/255.f,111.f/255.f), PxVec3(0.f/255.f ,209.f/255.f, 111.f/255.f), PxVec3(255.f / 255.f ,255.f / 255.f, 255.f / 255.f)};
 
 	//pyramid vertices
 	static PxVec3 pyramid_verts[] = {PxVec3(0,1,0), PxVec3(1,0,0), PxVec3(-1,0,0), PxVec3(0,0,1), PxVec3(0,0,-1)};
@@ -45,44 +45,6 @@ namespace PhysicsEngine
 			ACTOR2		= (1 << 2)
 			//add more if you need
 		};
-	};
-
-	///An example class showing the use of springs (distance joints).
-	class Trampoline
-	{
-		vector<DistanceJoint*> springs;
-		Box *bottom, *top;
-
-	public:
-		Trampoline(const PxVec3& dimensions=PxVec3(1.f,1.f,1.f), PxReal stiffness=1.f, PxReal damping=1.f)
-		{
-			PxReal thickness = .1f;
-			bottom = new Box(PxTransform(PxVec3(0.f,thickness,0.f)),PxVec3(dimensions.x,thickness,dimensions.z));
-			top = new Box(PxTransform(PxVec3(0.f,dimensions.y+thickness,0.f)),PxVec3(dimensions.x,thickness,dimensions.z));
-			springs.resize(4);
-			springs[0] = new DistanceJoint(bottom, PxTransform(PxVec3(dimensions.x,thickness,dimensions.z)), top, PxTransform(PxVec3(dimensions.x,-dimensions.y,dimensions.z)));
-			springs[1] = new DistanceJoint(bottom, PxTransform(PxVec3(dimensions.x,thickness,-dimensions.z)), top, PxTransform(PxVec3(dimensions.x,-dimensions.y,-dimensions.z)));
-			springs[2] = new DistanceJoint(bottom, PxTransform(PxVec3(-dimensions.x,thickness,dimensions.z)), top, PxTransform(PxVec3(-dimensions.x,-dimensions.y,dimensions.z)));
-			springs[3] = new DistanceJoint(bottom, PxTransform(PxVec3(-dimensions.x,thickness,-dimensions.z)), top, PxTransform(PxVec3(-dimensions.x,-dimensions.y,-dimensions.z)));
-
-			for (unsigned int i = 0; i < springs.size(); i++)
-			{
-				springs[i]->Stiffness(stiffness);
-				springs[i]->Damping(damping);
-			}
-		}
-
-		void AddToScene(Scene* scene)
-		{
-			scene->Add(bottom);
-			scene->Add(top);
-		}
-
-		~Trampoline()
-		{
-			for (unsigned int i = 0; i < springs.size(); i++)
-				delete springs[i];
-		}
 	};
 
 	///A customised collision class, implemneting various callbacks
@@ -182,9 +144,11 @@ namespace PhysicsEngine
 	class MyScene : public Scene
 	{
 		Plane* plane;
-		Box* box, * box2, *box3;
+		Bottom* bottom, * bottom2;
+		Top* top, *top2;
 		Sphere* sphere1;
 		Gun* gun1;
+		Goal* goal1;
 		MySimulationEventCallback* my_callback;
 		
 	public:
@@ -217,14 +181,14 @@ namespace PhysicsEngine
 			plane->Color(color_palette[5]);
 			Add(plane);
 
-			box = new Box(PxTransform(PxVec3(.0f,.5f,.0f)));
-			box->Color(color_palette[3]);
+			bottom = new Bottom(PxTransform(PxVec3(.0f,.5f,30.0f)));
+			bottom->Color(color_palette[6]);
 
-			box2 = new Box(PxTransform(PxVec3(.0f, .5f, 1.0f)));
-			box2->Color(color_palette[2]);
+			bottom2 = new Bottom(PxTransform(PxVec3(.0f, .5f, -30.0f)));
+			bottom2->Color(color_palette[6]);
 			
-			box3 = new Box(PxTransform(PxVec3(.0f, .5f, 2.f)));
-			box3->Color(color_palette[1]);
+			top = new Top(PxTransform(PxVec3(30.0f, 0.5f, 0.0f)));
+			top->Color(color_palette[6]);
 
 			sphere1 = new Sphere(PxTransform(PxVec3(.5f, 2.f, 2.f)));
 			sphere1->Color(color_palette[0]);
@@ -232,27 +196,30 @@ namespace PhysicsEngine
 			gun1 = new Gun(PxTransform(PxVec3(-15.f, 2.f, 0.f)));
 			gun1->Color(color_palette[4]);
 
+			goal1 = new Goal(PxTransform(PxVec3(15.f, 0.f, 0.f), PxQuat(PxPiDivTwo, PxVec3(0.f,1.f,0.f))));
+			goal1->Color(color_palette[4]);
+
 			//set collision filter flags
-			box->SetupFiltering(FilterGroup::ACTOR0, FilterGroup::ACTOR1);
+			bottom->SetupFiltering(FilterGroup::ACTOR0, FilterGroup::ACTOR1);
 
-			box2->SetupFiltering(FilterGroup::ACTOR0, FilterGroup::ACTOR1);
+			bottom2->SetupFiltering(FilterGroup::ACTOR0, FilterGroup::ACTOR1);
 
-			box3->SetupFiltering(FilterGroup::ACTOR0, FilterGroup::ACTOR1);
-			//use | operator to combine more actors e.g.
+			top->SetupFiltering(FilterGroup::ACTOR0, FilterGroup::ACTOR1);
 			
-			box->Name("Box1");
-			box2->Name("Box2");
-			box3->Name("Box3");
+			bottom->Name("Bottom1");
+			bottom2->Name("Bottom2");
+			top->Name("Box3");
 			
-			Add(box);
-			Add(box2);
-			Add(box3);
+			Add(bottom);
+			Add(bottom2);
+			Add(top);
 			Add(sphere1);
+			Add(goal1);
 			Add(gun1);
 
 
-			DistanceJoint joint(box, PxTransform(PxVec3(0.f, 0.f, 0.f), PxQuat(PxPi / 2, PxVec3(0.f, 1.f, 0.f))), box2, PxTransform(PxVec3(0.f, 5.f, 0.f)));
-			DistanceJoint joint2(box2, PxTransform(PxVec3(0.f, 0.f, 0.f), PxQuat(PxPi / 2, PxVec3(0.f, 1.f, 0.f))), box3, PxTransform(PxVec3(0.f, 5.f, 0.f)));
+			DistanceJoint joint(bottom, PxTransform(PxVec3(0.f, 0.f, 0.f), PxQuat(PxPi / 2, PxVec3(0.f, 1.f, 0.f))), top, PxTransform(PxVec3(0.f, 5.f, 0.f)));
+			DistanceJoint joint2(bottom2, PxTransform(PxVec3(0.f, 0.f, 0.f), PxQuat(PxPi / 2, PxVec3(0.f, 1.f, 0.f))), top, PxTransform(PxVec3(0.f, 5.f, 0.f)));
 
 
 
@@ -261,18 +228,7 @@ namespace PhysicsEngine
 		//Custom udpate function
 		virtual void CustomUpdate() 
 		{
-			/*int Px = rand() % 255;
-			int Py = rand() % 255;
-			int Pz = rand() % 255;
 
-			box = new Box(PxTransform(PxVec3(Px, Py, Pz)));
-
-			int R = rand() % 255;
-			int G = rand() % 255;
-			int B = rand() % 255;
-
-			box->Color(PxVec3(R / 255.0f, G / 255.0f, B / 255.0f));
-			Add(box);*/
 		}
 
 
@@ -314,21 +270,27 @@ namespace PhysicsEngine
 			
 			while (i < 5)
 			{
-				
-				sphere1 = new Sphere(PxTransform(PxVec3(-10.f, 2.f, 0.f + x)));
-				sphere1->Color(color_palette[2]);
-				Add(sphere1);
+				PxActor* GunActor = gun1->Get();
 
-				PxActor* actor = sphere1->Get();
+				if (GunActor->isRigidBody()) {
+					
+					PxRigidBody* rigidbodyGun = (PxRigidBody*)GunActor;
+					PxTransform pose = rigidbodyGun->getGlobalPose();
+					sphere1 = new Sphere(PxTransform(pose));
+					sphere1->Color(color_palette[2]);
+					Add(sphere1);
+				}
 
-			if (actor->isRigidBody())
+				PxActor* BallActor = sphere1->Get();								
+
+			if (BallActor->isRigidBody())
 			{
 				//actor is 100% a rigidbody
 				//..
 
 				//get the rigidbody by casting to it
 
-				PxRigidBody* rigidbody = (PxRigidBody*)actor;
+				PxRigidBody* rigidbodyBall = (PxRigidBody*)BallActor;
 
 				float max = 1;
 				int min = 0.2;
@@ -338,7 +300,7 @@ namespace PhysicsEngine
 				int Pz = rand() % 1;
 
 				//add some forces
-				rigidbody->addForce(PxVec3(Px, Py, .0f), PxForceMode::eIMPULSE, 1);
+				rigidbodyBall ->addForce(PxVec3(Px, Py, .0f), PxForceMode::eIMPULSE, 1);
 			}
 
 				x++;
@@ -349,6 +311,24 @@ namespace PhysicsEngine
 			//PxRigidBody::addForce(PxVec3)
 
 			//PxRigidBody::addForce(*(PxRigidDynamic*)sphere1, 1.0f);
+		}
+
+		void StartGame()
+		{
+			int Px = 0;
+
+			PxActor* actor1 = gun1->Get();
+
+			if (actor1->isRigidBody())
+			{
+				PxRigidBody* rigidbody1 = (PxRigidBody*)actor1;
+
+				while (Px < 10) {
+
+					rigidbody1->addForce(PxVec3(0.f, 0.0f, Px), PxForceMode::eIMPULSE, 1);
+					Px++;
+				}
+			}
 		}
 
 		/// An example use of key presse handling
