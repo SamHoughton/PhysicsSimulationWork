@@ -69,13 +69,60 @@ namespace PhysicsEngine
 		// - pose in 0,0,0
 		// - dimensions: 1m x 1m x 1m
 		// - denisty: 1kg/m^3
-		Gun(const PxTransform& pose = PxTransform(PxIdentity), PxVec3 dimensions = PxVec3(.2f, 0.5f, .5f), PxReal density = 1.f)
+		Gun(const PxTransform& pose = PxTransform(PxIdentity), PxVec3 dimensions = PxVec3(.2f, 0.5f, .5f), PxReal density = 50.f)
 			: DynamicActor(pose)
 		{
 			CreateShape(PxBoxGeometry(dimensions), density);
 			CreateShape(PxCapsuleGeometry(0.5f, 0.5f), density);
 
 			GetShape(1)->setLocalPose(PxTransform(PxVec3(.2f,0.5f,.0f)));
+		}
+	};
+
+	class catapult : public DynamicActor
+	{
+	public:
+		//a catapult base
+		catapult(const PxTransform& pose = PxTransform(PxIdentity), PxVec3 dimensions = PxVec3(2.f, 0.3f, 1.f), PxReal density = 50.f)
+			: DynamicActor(pose)
+		{
+			CreateShape(PxBoxGeometry(dimensions), density);
+			// The right pole of the cactapult
+			CreateShape(PxBoxGeometry(0.2f, 2.f, 0.2f), density);
+			// The left pole of the cactapult
+			CreateShape(PxBoxGeometry(0.2f, 2.f, 0.2f), density);
+			// 'wheels' on the back left
+			CreateShape(PxCapsuleGeometry(0.3f, 0.01f), density);
+			// 'wheels' on the back right
+			CreateShape(PxCapsuleGeometry(0.3f, 0.01f), density);
+			// The Center beam of the cactapult
+			CreateShape(PxBoxGeometry(.2f, 0.1f, 0.9f), density);
+
+			// Right Pole
+			GetShape(1)->setLocalPose(PxTransform(PxVec3(2.f, 1.f, 0.9f)));
+			// left Pole
+			GetShape(2)->setLocalPose(PxTransform(PxVec3(2.f, 1.f, -0.9f)));
+			// Back left wheel
+			GetShape(3)->setLocalPose(PxTransform(PxVec3(-1.8f, -0.1f, -1.2f)));
+			// Back light wheel
+			GetShape(4)->setLocalPose(PxTransform(PxVec3(-1.8f, -0.1f, 1.2f)));
+			// Centre beam wheel
+			GetShape(5)->setLocalPose(PxTransform(PxVec3(2.f, 2.1f, 0.2f)));
+
+
+		}
+	};
+
+	class catapultarm : public DynamicActor
+	{
+	public:
+		//a catapult base
+		catapultarm(const PxTransform& pose = PxTransform(PxIdentity), PxVec3 dimensions = PxVec3(2.f, 0.1f, 0.2f), PxReal density = 50.f)
+			: DynamicActor(pose)
+		{
+			CreateShape(PxBoxGeometry(dimensions), density);
+			// The right pole of the cactapult
+
 		}
 	};
 

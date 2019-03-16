@@ -1,12 +1,12 @@
-﻿  VisualDebugger.cpp
-c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(301): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(303): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(304): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(333): warning C4244: 'argument': conversion from 'int' to 'physx::PxReal', possible loss of data
-  Tutorial 3.cpp
-c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(301): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(303): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(304): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(333): warning C4244: 'argument': conversion from 'int' to 'physx::PxReal', possible loss of data
+﻿  Tutorial 3.cpp
+c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(311): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(313): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(314): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(340): warning C4244: 'argument': conversion from 'int' to 'physx::PxReal', possible loss of data
+  VisualDebugger.cpp
+c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(311): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(313): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(314): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(340): warning C4244: 'argument': conversion from 'int' to 'physx::PxReal', possible loss of data
   Generating Code...
   Tutorial 3.vcxproj -> C:\Users\Student\Desktop\PhysicsSimulationWork-master\x64\Debug\Tutorial 3.exe

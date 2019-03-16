@@ -149,6 +149,9 @@ namespace PhysicsEngine
 		Sphere* sphere1;
 		Gun* gun1;
 		Goal* goal1;
+		ConvexMesh* test;
+		catapult* test2;
+		catapultarm* test3;
 		MySimulationEventCallback* my_callback;
 		
 	public:
@@ -190,6 +193,9 @@ namespace PhysicsEngine
 			top = new Top(PxTransform(PxVec3(30.0f, 0.5f, 0.0f)));
 			top->Color(color_palette[6]);
 
+			/*test = new Pyramid(PxTransform(PxVec3(10.0f, 0.5f, 0.0f)));
+			test->Color(color_palette[6]);*/;
+
 			sphere1 = new Sphere(PxTransform(PxVec3(.5f, 2.f, 2.f)));
 			sphere1->Color(color_palette[0]);
 
@@ -198,6 +204,12 @@ namespace PhysicsEngine
 
 			goal1 = new Goal(PxTransform(PxVec3(15.f, 0.f, 0.f), PxQuat(PxPiDivTwo, PxVec3(0.f,1.f,0.f))));
 			goal1->Color(color_palette[4]);
+
+			test2 = new catapult(PxTransform(PxVec3(10.0f, 1.f, 0.0f)));
+			test2->Color(color_palette[2]);
+			
+			test3 = new catapultarm(PxTransform(PxVec3(10.0f, 2.f, 0.0f)));
+			test3->Color(color_palette[2]);
 
 			//set collision filter flags
 			bottom->SetupFiltering(FilterGroup::ACTOR0, FilterGroup::ACTOR1);
@@ -216,10 +228,13 @@ namespace PhysicsEngine
 			Add(sphere1);
 			Add(goal1);
 			Add(gun1);
+			Add(test2);
+			Add(test3);
 
 
 			DistanceJoint joint(bottom, PxTransform(PxVec3(0.f, 0.f, 0.f), PxQuat(PxPi / 2, PxVec3(0.f, 1.f, 0.f))), top, PxTransform(PxVec3(0.f, 5.f, 0.f)));
 			DistanceJoint joint2(bottom2, PxTransform(PxVec3(0.f, 0.f, 0.f), PxQuat(PxPi / 2, PxVec3(0.f, 1.f, 0.f))), top, PxTransform(PxVec3(0.f, 5.f, 0.f)));
+			DistanceJoint catapultarm(test2, PxTransform(PxVec3(0.f, 3.f, 0.f), PxQuat(PxPi / 2, PxVec3(0.f, 1.f, 0.f))), test3, PxTransform(PxVec3(0.f, 5.f, 0.f)));
 
 
 
@@ -315,19 +330,15 @@ namespace PhysicsEngine
 
 		void StartGame()
 		{
-			int Px = 0;
+			int Px = rand() % (50 - (-50) + 1) + -50;
 
 			PxActor* actor1 = gun1->Get();
-
 			if (actor1->isRigidBody())
 			{
 				PxRigidBody* rigidbody1 = (PxRigidBody*)actor1;
 
-				while (Px < 10) {
-
-					rigidbody1->addForce(PxVec3(0.f, 0.0f, Px), PxForceMode::eIMPULSE, 1);
-					Px++;
-				}
+				rigidbody1->addForce(PxVec3(0.f, 0.0f, Px), PxForceMode::eIMPULSE, 1);
+				
 			}
 		}
 
