@@ -150,8 +150,8 @@ namespace PhysicsEngine
 		Gun* gun1;
 		Goal* goal1;
 		ConvexMesh* test;
-		catapult* test2;
-		catapultarm* test3;
+		catapult* catapultBase;
+		catapultarm* catapultArm;
 		MySimulationEventCallback* my_callback;
 		
 	public:
@@ -199,17 +199,14 @@ namespace PhysicsEngine
 			sphere1 = new Sphere(PxTransform(PxVec3(.5f, 2.f, 2.f)));
 			sphere1->Color(color_palette[0]);
 
-			gun1 = new Gun(PxTransform(PxVec3(-15.f, 2.f, 0.f)));
-			gun1->Color(color_palette[4]);
-
 			goal1 = new Goal(PxTransform(PxVec3(15.f, 0.f, 0.f), PxQuat(PxPiDivTwo, PxVec3(0.f,1.f,0.f))));
 			goal1->Color(color_palette[4]);
 
-			test2 = new catapult(PxTransform(PxVec3(10.0f, 1.f, 0.0f)));
-			test2->Color(color_palette[2]);
+			catapultBase = new catapult(PxTransform(PxVec3(-15.f, 2.f, 0.f)));
+			catapultBase->Color(color_palette[2]);
 			
-			test3 = new catapultarm(PxTransform(PxVec3(10.0f, 2.f, 0.0f)));
-			test3->Color(color_palette[2]);
+			catapultArm = new catapultarm(PxTransform(PxVec3(-15.f, 4.f, 0.f)));
+			catapultArm->Color(color_palette[2]);
 
 			//set collision filter flags
 			bottom->SetupFiltering(FilterGroup::ACTOR0, FilterGroup::ACTOR1);
@@ -227,16 +224,17 @@ namespace PhysicsEngine
 			Add(top);
 			Add(sphere1);
 			Add(goal1);
-			Add(gun1);
-			Add(test2);
-			Add(test3);
+			Add(catapultBase);
+			Add(catapultArm);
 
 
 			DistanceJoint joint(bottom, PxTransform(PxVec3(0.f, 0.f, 0.f), PxQuat(PxPi / 2, PxVec3(0.f, 1.f, 0.f))), top, PxTransform(PxVec3(0.f, 5.f, 0.f)));
+
 			DistanceJoint joint2(bottom2, PxTransform(PxVec3(0.f, 0.f, 0.f), PxQuat(PxPi / 2, PxVec3(0.f, 1.f, 0.f))), top, PxTransform(PxVec3(0.f, 5.f, 0.f)));
-			DistanceJoint catapultarm(test2, PxTransform(PxVec3(0.f, 3.f, 0.f), PxQuat(PxPi / 2, PxVec3(0.f, 1.f, 0.f))), test3, PxTransform(PxVec3(0.f, 5.f, 0.f)));
 
-
+			DistanceJoint joint3(catapultBase, PxTransform(PxVec3(1.f, 5.f, 0.f), PxQuat(PxPi / 2, PxVec3(0.f, 1.f, 0.f))), catapultArm, PxTransform(PxVec3(0.f, 2.f, 0.f)));
+			
+			joint3.Damping(100.f); 
 
 		}
 
@@ -285,18 +283,19 @@ namespace PhysicsEngine
 			
 			while (i < 5)
 			{
-				PxActor* GunActor = gun1->Get();
+				PxActor* GunActor = catapultBase->Get();
 
 				if (GunActor->isRigidBody()) {
 					
 					PxRigidBody* rigidbodyGun = (PxRigidBody*)GunActor;
-					PxTransform pose = rigidbodyGun->getGlobalPose();
-					sphere1 = new Sphere(PxTransform(pose));
+					PxTransform gunPose = rigidbodyGun->getGlobalPose();
+
+					sphere1 = new Sphere(PxTransform(gunPose));
 					sphere1->Color(color_palette[2]);
 					Add(sphere1);
 				}
 
-				PxActor* BallActor = sphere1->Get();								
+				PxActor* BallActor = sphere1->Get();																
 
 			if (BallActor->isRigidBody())
 			{
@@ -316,6 +315,7 @@ namespace PhysicsEngine
 
 				//add some forces
 				rigidbodyBall ->addForce(PxVec3(Px, Py, .0f), PxForceMode::eIMPULSE, 1);
+				rigidbodyBall ->addForce(PxVec3(Px, Py, .0f), PxForceMode::eIMPULSE, 1);
 			}
 
 				x++;
@@ -332,12 +332,15 @@ namespace PhysicsEngine
 		{
 			int Px = rand() % (50 - (-50) + 1) + -50;
 
-			PxActor* actor1 = gun1->Get();
-			if (actor1->isRigidBody())
+			PxActor* base = catapultBase->Get();
+			PxActor* arm = catapultArm->Get();
+			if (base->isRigidBody() && arm->isRigidBody())
 			{
-				PxRigidBody* rigidbody1 = (PxRigidBody*)actor1;
+				PxRigidBody* baseBody = (PxRigidBody*)base;
+				PxRigidBody* baseArm = (PxRigidBody*)arm;
 
-				rigidbody1->addForce(PxVec3(0.f, 0.0f, Px), PxForceMode::eIMPULSE, 1);
+				baseBody->addForce(PxVec3(0.f, 0.0f, 50.f), PxForceMode::eIMPULSE, 1);
+				baseArm->addForce(PxVec3(0.f, 0.0f, 50.f), PxForceMode::eIMPULSE, 1);
 				
 			}
 		}

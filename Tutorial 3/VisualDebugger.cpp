@@ -190,7 +190,7 @@ namespace VisualDebugger
 		{
 		//implement your own
 		case 'R':
-			scene->GunShot();
+			scene->shotGun();
 			break;
 		default:
 			break;

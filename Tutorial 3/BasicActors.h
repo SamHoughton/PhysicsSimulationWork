@@ -69,7 +69,7 @@ namespace PhysicsEngine
 		// - pose in 0,0,0
 		// - dimensions: 1m x 1m x 1m
 		// - denisty: 1kg/m^3
-		Gun(const PxTransform& pose = PxTransform(PxIdentity), PxVec3 dimensions = PxVec3(.2f, 0.5f, .5f), PxReal density = 50.f)
+		Gun(const PxTransform& pose = PxTransform(PxIdentity), PxVec3 dimensions = PxVec3(.2f, 0.5f, .5f), PxReal density = 5.f)
 			: DynamicActor(pose)
 		{
 			CreateShape(PxBoxGeometry(dimensions), density);
@@ -83,7 +83,7 @@ namespace PhysicsEngine
 	{
 	public:
 		//a catapult base
-		catapult(const PxTransform& pose = PxTransform(PxIdentity), PxVec3 dimensions = PxVec3(2.f, 0.3f, 1.f), PxReal density = 50.f)
+		catapult(const PxTransform& pose = PxTransform(PxIdentity), PxVec3 dimensions = PxVec3(2.f, 0.3f, 1.f), PxReal density = 10.f)
 			: DynamicActor(pose)
 		{
 			CreateShape(PxBoxGeometry(dimensions), density);
@@ -117,7 +117,7 @@ namespace PhysicsEngine
 	{
 	public:
 		//a catapult base
-		catapultarm(const PxTransform& pose = PxTransform(PxIdentity), PxVec3 dimensions = PxVec3(2.f, 0.1f, 0.2f), PxReal density = 50.f)
+		catapultarm(const PxTransform& pose = PxTransform(PxIdentity), PxVec3 dimensions = PxVec3(2.f, 0.1f, 0.2f), PxReal density = 0.1f)
 			: DynamicActor(pose)
 		{
 			CreateShape(PxBoxGeometry(dimensions), density);
