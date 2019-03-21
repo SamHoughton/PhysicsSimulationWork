@@ -1,0 +1,7 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (Tutorial 3.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Tutorial 3.cpp
+c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(233): warning C4305: 'argument': truncation from 'double' to 'physx::PxReal'
+  VisualDebugger.cpp
+c:\users\student\desktop\physicssimulationwork-master\tutorial 3\myphysicsengine.h(233): warning C4305: 'argument': truncation from 'double' to 'physx::PxReal'
+  Generating Code...
+  Tutorial 3.vcxproj -> C:\Users\Student\Desktop\PhysicsSimulationWork-master\x64\Debug\Rugby.exe
